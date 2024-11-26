@@ -87,17 +87,19 @@ body{
     font-weight: 700;
 }
 .btnDelete{
-    background-color: #FF2929;
+    background-color: #FF4545;
     color: #fff;
     transition: color 0.5 ease-in;
+    cursor: pointer;
     &&:hover{
-        background-color: #1230AE;
+        background-color: #FF0000;
     }
 }
 .btnUpdate{
     background-color: #4379F2;
     color: #fff;
     transition: color 0.5 ease-in;
+    cursor: pointer;
     &&:hover{
         background-color: #1230AE;
     }
