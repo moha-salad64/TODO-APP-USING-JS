@@ -54,16 +54,17 @@ body{
 }
 
 .todo-list{
-    padding: 12px 10px;
+    padding: 14px 15px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 60%;
+    width: 80%;
     margin-bottom: 7px;
 }
 
 .todo-list , .todo-item{
     background-color: #FEF9F2;
+    
     border-radius: 5px;
     font-size: 20px;
 }
@@ -71,7 +72,7 @@ body{
 .todo-item{
     border: 1px solid rgb(207, 205, 205);
     padding: 5px 10px;
-    width: 60%;
+    width: 80%;
     cursor: pointer;
 }
 
