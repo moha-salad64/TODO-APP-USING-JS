@@ -3,9 +3,25 @@ const addTodo = document.getElementById('btntodo');
 const container = document.querySelector('.container')
 
 
+let editMode = false;
+let currentEditItem = null;
+
+function loadTodo(){ 
+    const todos = JSON.parse(localStorage.getItem('todos')) || [];
+    todos.forEach(todo =>{
+        createTodoListItem(todo)
+    });
+}
+function SaveTodo(){
+    const allTodos = [];
+    document.querySelectorAll('.todo-item').forEach(item =>{
+        allTodos.push(item.textContent)
+    });
+    localStorage.setItem('todos', JSON.stringify(allTodos))
+}
+
 //creating todo list items
 function createTodoListItem(task) {
-
     //creating todo list
     const todoList = document.createElement('div');
     todoList.className = 'todo-list';
@@ -21,53 +37,58 @@ function createTodoListItem(task) {
     const btnDelete = document.createElement('button');
     btnDelete.innerText = "delete";
     btnDelete.className = 'btnDelete';
-    //passing elements parent elements
-    container.appendChild(todoList).appendChild(todoItems);
-    container.appendChild(todoList).appendChild(btnUpdate);
-    container.appendChild(todoList).appendChild(btnDelete)
+    //append children
+    todoList.appendChild(todoItems);
+    todoList.appendChild(btnUpdate)
+    todoList.appendChild(btnDelete)
+    container.appendChild(todoList)
 
-
-    deleteTodoItem();
-    updateTodoItem();
-}
-
-
-//Delete Todo List Item
-function deleteTodoItem() {
-    let current_task = document.querySelectorAll('.btnDelete');
-    current_task.forEach((tasks) => {
-        tasks.addEventListener('click', (event) => {
-            event.preventDefault();
-            tasks.parentElement.remove();
-        })
+    btnDelete.addEventListener('click', () =>{
+        todoList.remove();
+        SaveTodo();
     })
+    
+    //update todo item
+    btnUpdate.addEventListener("click", () =>{
+        inputTodo.value = todoItems.textContent;
+        addTodo.innerText = "Update";
+        editMode = true;
+        currentEditItem = todoItems;
+    });
 }
 
-
-//update Tod List Item
-function updateTodoItem(){
-    let updateItem = document.querySelectorAll('.btnUpdate');
-    updateItem.forEach((item) =>{
-        item.addEventListener('click' , (event) =>{
-            event.preventDefault();
-            let todoText = item.parentElement.querySelector('.todo-item').textContent;
-            inputTodo.value = todoText;
-        })
-    })
-}
 
 addTodo.addEventListener('click', (event) => {
     event.preventDefault();
-
     let todoItem = inputTodo.value.trim();
-    if (todoItem) {
-        // console.log(`${todoItem}`)
-        createTodoListItem(todoItem);
-        inputTodo.value = ""
+
+    if(!todoItem){
+        inputTodo.style.border = '1px solid red';
+        return
+    }
+
+    if (!editMode) {
+        createTodoListItem(todoItem)
     }
     else {
-        inputTodo.style.border = '1px solid red'
+        // console.log(`${todoItem}`)
+        currentEditItem.textContent = todoItem;
+        editMode = false;
+        currentEditItem = null;
+        addTodo.innerText = "Add";
     }
 
+    SaveTodo();
+    inputTodo.value = ""
+    inputTodo.style.border = '';
+
 })
+
+//reset border error while starting typing
+inputTodo.addEventListener("input", () =>{
+    inputTodo.style.border ='';
+})
+
+//get todo items when page loads
+window.addEventListener('DOMContentLoaded', loadTodo)
 
